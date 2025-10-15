@@ -5,4 +5,4 @@
   tasks:
     - name: Display provisioning message
       debug:
-        msg: "Provisioning in progress for {{ hostname }} ({{ ip }})..."
+        msg: "Provisioning in progress for {{ assigned_hostname }} ({{ assigned_ip }})..."

@@ -21,3 +21,9 @@
         msg:
           - "Hostname: {{ hostname }}"
           - "IP: {{ ip }}"
+
+    - name: Set IP address fact for workflow
+      set_stats:
+        data:
+          assigned_ip: "{{ ip }}"
+          assigned_hostname: "{{ hostname }}"
