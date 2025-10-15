@@ -5,7 +5,7 @@
   tasks:
     - name: Display provisioning message
       debug:
-        msg: "Provisioning in progress for {{ assigned_hostname }} ({{ assigned_ip }})..."
+        msg: "VM Provisioning status : IP: {{ assigned_hostname }} / Hostname: ({{ assigned_ip }}) / Deployed: {{ is_deployed }}..."
 
     - name: Set deploy fact for workflow
       set_stats:

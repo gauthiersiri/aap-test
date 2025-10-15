@@ -22,7 +22,7 @@
           - "Hostname: {{ hostname }}"
           - "IP: {{ ip }}"
 
-    - name: Set IP address fact for workflow
+    - name: Set info fact for workflow
       set_stats:
         data:
           assigned_ip: "{{ ip }}"
