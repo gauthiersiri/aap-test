@@ -1,0 +1,8 @@
+---
+- name: Call API and store results in facts
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Display provisioning message
+      debug:
+        msg: "Provisioning in progress for {{ hostname }} ({{ ip }})..."

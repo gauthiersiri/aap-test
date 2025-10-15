@@ -1,0 +1,23 @@
+---
+- name: Call API and store results in facts
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Call the API and get JSON response
+      uri:
+        url: https://api-host-api.apps.68e9008372e06a9c307a9e81.ocp.techzone.ibm.com/api/data
+        method: GET
+        return_content: yes
+        status_code: 200
+      register: api_response
+
+    - name: Set hostname and ip facts from API response
+      set_fact:
+        hostname: "{{ (api_response.json).hostname }}"
+        ip: "{{ (api_response.json).ip }}"
+
+    - name: Display hostname and ip facts
+      debug:
+        msg:
+          - "Hostname: {{ hostname }}"
+          - "IP: {{ ip }}"
