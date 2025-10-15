@@ -7,7 +7,3 @@
       debug:
         msg: "VM Provisioning status : IP: {{ assigned_hostname }} / Hostname: ({{ assigned_ip }}) / Deployed: {{ is_deployed }}..."
 
-    - name: Set deploy fact for workflow
-      set_stats:
-        data:
-          is_deployed: true
