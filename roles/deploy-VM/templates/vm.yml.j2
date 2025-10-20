@@ -29,7 +29,7 @@ spec:
       architecture: amd64
       domain:
         cpu:
-          cores: {{ vm.cpu / 2 }}
+          cores: {{ (vm.cpu | int) / 2 }}
           sockets: 2
           threads: 1
         devices:
