@@ -1,0 +1,101 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ vm.name }}
+  namespace: {{ rhov.namespace }}
+spec:
+  #running: true
+  runStrategy: RerunOnFailure
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        name: "{{ vm.name }}-rootdisk"
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: {{ template.datasource_name }}
+          namespace: openshift-virtualization-os-images      
+        storage:
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: {{ vm.disk_size_gb}}Gi
+          storageClassName: {{ rhov.storage_class }}
+  template:
+    spec:
+      evictionStrategy: LiveMigrateIfPossible
+      architecture: amd64
+      domain:
+        cpu:
+          cores: {{ vm.cpu / 2 }}
+          sockets: 2
+          threads: 1
+        devices:
+          disks:
+            - bootOrder: 1
+              disk:
+                bus: virtio
+              name: rootdisk
+            - bootOrder: 2
+              disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - bridge: {}
+              model: virtio
+              name: default
+          logSerialConsole: false
+          networkInterfaceMultiqueue: false
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: pc-q35-rhel9.4.0
+        memory:
+          guest: {{ vm.ram_gb }}Gi
+        resources: {}
+      networks:
+        - multus:
+            networkName: {{ rhov.bridge }}
+          name: default
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - dataVolume:
+            name: "{{ vm.name }}-rootdisk"
+          name: rootdisk
+        - cloudInitNoCloud:
+            networkData: |
+              ethernets:
+{% if template.datasource_name == "rhel9-custom-template" %}
+                enp1s0:
+{% else %}
+                eth0:
+{% endif %}
+                  addresses:
+                    - {{ vm.ip }}/24
+                  gateway4: {{ network.gateway }}
+                  nameservers:
+                    addresses: [{{ network.dns1 }}, {{ network.dns2 }}]
+              version: 2
+            userData: |
+              #cloud-config
+              user: cloud-user
+              password: "{{ vm.new_root_password }}"
+              ssh_authorized_keys:
+                - "{{ users.sebastien.user_pubkey[0] }}"
+                - "{{ users.charlotte.user_pubkey[0] }}"
+                - "{{ users.jerome.user_pubkey[0] }}"
+              chpasswd:
+                expire: false
+              rh_subscription:
+                activation-key: {{ rhn.activation_key }}
+                org: {{ rhn.org_id }}
+              manage_resolv_conf: true
+          name: cloudinitdisk

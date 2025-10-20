@@ -1,0 +1,143 @@
+---
+- name: Wait for system to become reachable 
+  ansible.builtin.wait_for_connection:
+    timeout: 900
+  # delegate_to: localhost
+
+- name: gather facts about OS
+  ansible.builtin.setup:
+
+- name: Ensure admpriv group exists
+  ansible.builtin.group:
+    name: admpriv
+    state: present
+
+- name: Include vars of users.yaml
+  ansible.builtin.include_vars:
+    file: group_vars/users.yaml
+
+- name: Set a hostname 
+  ansible.builtin.hostname:
+    name: "{{ vm.name }}"
+    use: systemd
+
+- name: Create Users
+  ansible.builtin.user:
+    name: "{{ item.value.username }}"
+    state: present
+    groups: "{{ item.value.group }}"
+    append: true
+    comment: "{{ item.value.mail }}"
+    createhome: yes
+    password: "{{ users_password | password_hash('sha512') }}"
+  loop: "{{ lookup('ansible.builtin.dict', users) }}"
+  when: "item.key in server_users"
+
+- name: Change root password
+  ansible.builtin.user:
+    name: "root"
+    password: "{{ vm.new_root_password | password_hash('sha512') }}"
+
+- name: Set authorized key for users
+  ansible.builtin.authorized_key:
+    user: "{{ item.value.username }}"
+    state: present
+    key: "{{ item.value.user_pubkey[0] }}"
+  loop: "{{ lookup('ansible.builtin.dict', users) }}"
+  when: "item.key in server_users and item.key != 'iauto'"
+
+- name: Set authorized key for iauto
+  ansible.builtin.authorized_key:
+    user: "iauto"
+    state: present
+    key: "{{ item }}"
+  loop: "{{ users.iauto.user_pubkey }}"
+  
+- name: Add group admpriv to sudoers
+  copy:
+    content: "%admpriv ALL=(ALL) NOPASSWD:ALL"
+    dest: "/etc/sudoers.d/10_admins"
+    mode: 0440
+
+- name: Expire users passwords
+  ansible.builtin.command: chage -d 0 "{{item.value.username}}"
+  loop: "{{ lookup('ansible.builtin.dict', users) }}"
+  when: "item.key in server_users and item.key != 'iauto'"
+
+- name: Set users passwords to expire every 365 days
+  ansible.builtin.command: chage -M 365 "{{item.value.username}}"
+  loop: "{{ lookup('ansible.builtin.dict', users) }}"
+  when: "item.key in server_users"
+
+- name: Set root password to expire every 365 days
+  ansible.builtin.command: chage -M 365 root
+
+# - name: Deploy chrony.conf template
+#   ansible.builtin.template:
+#     src: chrony.conf.j2
+#     dest: /etc/chrony.conf
+#     owner: root
+#     group: root
+#     mode: 0644
+#     backup: yes
+
+# - name: Restart chronyd
+#   ansible.builtin.service:
+#     name: chronyd
+#     state: restarted
+
+- name: "Replace dstmop@fr.ibm.com by security owner mail"
+  ansible.builtin.replace:
+    path: /etc/passwd
+    regexp: "dstmop@fr.ibm.com"
+    replace: "{{ users[security_owner].mail }}"
+    backup: yes
+
+# - name: Assign correct OWNER tag to Crowdstrike
+#   ansible.builtin.command: /opt/CrowdStrike/falconctl -s -f --tags="UT/10C00,UPDATES/TEST,AV/YES,OWNER/{{ users[security_owner].id }}"
+#   ignore_errors: true
+
+- name: Verify SELinux Permissive
+  ansible.posix.selinux:
+    policy: targeted
+    state: permissive
+
+- name: Update OS 
+  block:
+    - name: Subscription RedHat
+      redhat_subscription:
+        state: present
+        force_register: true
+        #username: "{{ rhn.user }}"
+        #password: "{{ rhn.password }}"
+        activationkey: "{{ rhn.activation_key }}"
+        org_id: "{{ rhn.org_id }}"
+        server_proxy_hostname: '{{ proxy_url | urlsplit("hostname") | default("") }}'
+        server_proxy_port: '{{ proxy_url | urlsplit("port") | default("") }}'
+        server_proxy_scheme: '{{ proxy_url | urlsplit("scheme") | default("") }}'
+      when: ansible_distribution == "RedHat" 
+
+    - name: Update all packages RHEL
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+      when: ansible_facts.os_family == "RedHat"
+
+- name: Install git and python3.11 
+  ansible.builtin.yum:
+    name: 
+      - python3.11.x86_64
+      - git
+      - ansible-core
+      - python3.11-pip
+    state: latest
+  when: ansible_distribution == "RedHat"
+
+- name: Reboot host
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: whoami

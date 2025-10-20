@@ -1,0 +1,30 @@
+vm:
+  ip: ""
+  name: ""
+  disk_size_gb: ""
+  cpu: ""
+  ram_gb: ""
+  new_root_password: ""
+
+rhov:
+  namespace: ""
+  api_url: ""
+  api_token: ""
+  bridge: ""
+  storage_class: ""
+
+template:
+  datasource_name: ""
+
+network:
+  gateway: ""
+  dns1: ""
+  dns2: ""
+  dns_suffix: ""
+
+rhn:
+  activation_key: ""
+  org_id: ""
+
+
+

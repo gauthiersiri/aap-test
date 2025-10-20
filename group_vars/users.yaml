@@ -1,0 +1,20 @@
+---
+users:
+  gauthier:
+    username: "gauth"
+    password: "{{users_password}}"
+    group: "admpriv"
+    admin: true
+    expire_password: true
+    user_pubkey: 
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCs5ncJoAjilmw/47A+fx+Uqd6IUzlFMxpe+Y9TnUHReug8BSWe4YBV+aavYI5ZAPis5f3OiQ5ZespK07XmzczMx+wOc8Y3yhwFAYGRxJ62C2qmiBVaBmpDXeykCkHCOcbduU/L/KAwtki5AMSg9JF+p4u22YhCSSG9R9OnKuFMqOhk1CGgSbmEvVa2V1C0AE+tJ5vXjPgjVldN6dO4KxcOMwLmLau7f5WzJCwVSu5Y/pEVFS4GW9uYBD5HtmlY23V2uz3Zh569R78FbB5Nvh8LdEogsZ5RYvw4e8X8m26SENDaBAf50AroRiPpc8j8oTp+b2X4hxAez04hAYnZI5D5 azuread/gauthiersiri@LAPTOP-RKSJ6CQ7"
+  aap:
+    username: "aap"
+    password: "{{users_password}}"
+    group: "admpriv"
+    admin: true
+    expire_password: true
+    user_pubkey: 
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGUVzd2JN3JxHzxE316H8VTxruAFUwaL+s1BuYnbDSRJ gauthiersiri@MacBook-Pro-de-Gauthier.local"
+
+      
