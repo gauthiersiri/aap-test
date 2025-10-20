@@ -17,4 +17,17 @@ users:
     user_pubkey: 
       - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGUVzd2JN3JxHzxE316H8VTxruAFUwaL+s1BuYnbDSRJ gauthiersiri@MacBook-Pro-de-Gauthier.local"
 
+  iauto:
+    username: "iauto"
+    password: "Pass4Iaut0ITSSCompatible!"
+    group: "admpriv"
+    mail: "dstmop@fr.ibm.com"
+    id: "012346578"
+    admin: true
+    expire_password: false
+    user_pubkey: 
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAloP4Gx0gyDsHfxF7T4l5d8foWvfNLH4o4P0SM2WcQqdVnza13pSW9nr6kBy3y7DMSOHpZDrylyoEt9QlsZYljj6ys37+iLFOlY2yF/5v35sOwYtVTN60cfcj3FhPJ6MdjHmIcaCuaem/fX4xIeID3e1R9LyZfqVIGgM3SZ6HN+AwerZjBBByIhleWIS5P1fVfemEDDP4cJhSA4vzV91qOdxz2giZFgnRqITNX7Ymbh0DWwOqpobAXsynNA2/Qg0PhoimPljKKwrP0n8HWZ1L9ck2ufso10kl5VyCixMEGNQGKNn1TIGvLKVCY2YSDJO+9wXWzLdNg9IpQJ8Su0ebEw== charlotte.despres@fr.ibm.com
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCs5ncJoAjilmw/47A+fx+Uqd6IUzlFMxpe+Y9TnUHReug8BSWe4YBV+aavYI5ZAPis5f3OiQ5ZespK07XmzczMx+wOc8Y3yhwFAYGRxJ62C2qmiBVaBmpDXeykCkHCOcbduU/L/KAwtki5AMSg9JF+p4u22YhCSSG9R9OnKuFMqOhk1CGgSbmEvVa2V1C0AE+tJ5vXjPgjVldN6dO4KxcOMwLmLau7f5WzJCwVSu5Y/pEVFS4GW9uYBD5HtmlY23V2uz3Zh569R78FbB5Nvh8LdEogsZ5RYvw4e8X8m26SENDaBAf50AroRiPpc8j8oTp+b2X4hxAez04hAYnZI5D5 azuread/gauthiersiri@LAPTOP-RKSJ6CQ7
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINy62HYm3Ss/YbSBP+3jktwP+QmqW8USV4AVLaTBgVKG sebastienchabrolles@seb-MBP
+
 users_password: "2beChanged4MOP23!"
