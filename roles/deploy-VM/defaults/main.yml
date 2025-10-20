@@ -26,5 +26,11 @@ rhn:
   activation_key: ""
   org_id: ""
 
+server_users: 
+  - gauthier
+  - aap
+
+
+
 
 
