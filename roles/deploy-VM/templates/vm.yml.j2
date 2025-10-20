@@ -89,9 +89,8 @@ spec:
               user: cloud-user
               password: "{{ vm.new_root_password }}"
               ssh_authorized_keys:
-                - "{{ users.sebastien.user_pubkey[0] }}"
-                - "{{ users.charlotte.user_pubkey[0] }}"
-                - "{{ users.jerome.user_pubkey[0] }}"
+                - "{{ users.gauthier.user_pubkey[0] }}"
+                - "{{ users.aap.user_pubkey[0] }}"
               chpasswd:
                 expire: false
               rh_subscription:
