@@ -17,4 +17,4 @@ users:
     user_pubkey: 
       - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGUVzd2JN3JxHzxE316H8VTxruAFUwaL+s1BuYnbDSRJ gauthiersiri@MacBook-Pro-de-Gauthier.local"
 
-      
+users_password: "2beChanged4MOP23!"
