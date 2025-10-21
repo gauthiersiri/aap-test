@@ -4,6 +4,7 @@ users:
     username: "gauth"
     password: "{{users_password}}"
     group: "admpriv"
+    mail: "gauth@fr.ibm.com"
     admin: true
     expire_password: true
     user_pubkey: 
@@ -12,6 +13,7 @@ users:
     username: "aap"
     password: "{{users_password}}"
     group: "admpriv"
+    mail: "aap@fr.demo.com"
     admin: true
     expire_password: true
     user_pubkey: 

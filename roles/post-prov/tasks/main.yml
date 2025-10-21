@@ -72,31 +72,6 @@
 - name: Set root password to expire every 365 days
   ansible.builtin.command: chage -M 365 root
 
-# - name: Deploy chrony.conf template
-#   ansible.builtin.template:
-#     src: chrony.conf.j2
-#     dest: /etc/chrony.conf
-#     owner: root
-#     group: root
-#     mode: 0644
-#     backup: yes
-
-# - name: Restart chronyd
-#   ansible.builtin.service:
-#     name: chronyd
-#     state: restarted
-
-- name: "Replace dstmop@fr.ibm.com by security owner mail"
-  ansible.builtin.replace:
-    path: /etc/passwd
-    regexp: "dstmop@fr.ibm.com"
-    replace: "{{ users[security_owner].mail }}"
-    backup: yes
-
-# - name: Assign correct OWNER tag to Crowdstrike
-#   ansible.builtin.command: /opt/CrowdStrike/falconctl -s -f --tags="UT/10C00,UPDATES/TEST,AV/YES,OWNER/{{ users[security_owner].id }}"
-#   ignore_errors: true
-
 - name: Verify SELinux Permissive
   ansible.posix.selinux:
     policy: targeted
