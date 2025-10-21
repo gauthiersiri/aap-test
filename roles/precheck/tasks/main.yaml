@@ -1,0 +1,35 @@
+---
+- name: Check IP not already in use
+  ansible.builtin.shell: "ping -c1 -w1 {{ vm.ip }} > /dev/null; echo $?"
+  register: result_ping
+  delegate_to: localhost
+
+- name: Fail if IP already in use
+  ansible.builtin.fail:
+    msg: "IP {{ vm.ip }} ALREADY IN USE!"
+  when: result_ping.stdout == "0"
+  delegate_to: localhost
+
+- name: Fail if openshift is in project name
+  ansible.builtin.fail:
+    msg: "DO NOT USE openshift in project name"
+  when: "'openshift' in rhov.namespace"
+  delegate_to: localhost
+
+- name: "Verify vm name does not already exist in ns {{ rhov.namespace }}"
+  kubernetes.core.k8s_info:
+    namespace: "{{ rhov.namespace }}"
+    kind: VirtualMachine
+    api_version: kubevirt.io/v1
+    name: "{{ vm.name }}"
+    host: "{{ rhov.api_url }}"
+    api_key: "{{ rhov.api_token }}"
+    validate_certs: false
+  register: vm_exists
+  delegate_to: localhost
+
+- name: Fail if VM name already in use
+  ansible.builtin.fail:
+    msg: "{{ vm.name }} ALREADY EXISTS!"
+  when: vm_exists.resources | length > 0
+  delegate_to: localhost
