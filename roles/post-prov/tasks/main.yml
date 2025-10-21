@@ -87,9 +87,9 @@
         #password: "{{ rhn.password }}"
         activationkey: "{{ rhn.activation_key }}"
         org_id: "{{ rhn.org_id }}"
-        server_proxy_hostname: '{{ proxy_url | urlsplit("hostname") | default("") }}'
-        server_proxy_port: '{{ proxy_url | urlsplit("port") | default("") }}'
-        server_proxy_scheme: '{{ proxy_url | urlsplit("scheme") | default("") }}'
+        server_proxy_hostname: "{{ (proxy_url | default('') | length) > 0 | ternary((proxy_url | urlsplit('hostname')), omit) }}"
+        server_proxy_port: "{{ (proxy_url | default('') | length) > 0 | ternary((proxy_url | urlsplit('hostname')), omit) }}"
+        server_proxy_scheme: "{{ (proxy_url | default('') | length) > 0 | ternary((proxy_url | urlsplit('hostname')), omit) }}"
       when: ansible_distribution == "RedHat" 
 
     - name: Update all packages RHEL
