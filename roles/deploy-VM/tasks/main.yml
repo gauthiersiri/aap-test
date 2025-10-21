@@ -1,15 +1,15 @@
 ---
  
-# - name: Check IP not already in use
-#   ansible.builtin.shell: "ping -c1 -w1 {{ vm.ip }} > /dev/null; echo $?"
-#   register: result_ping
-#   delegate_to: localhost
+- name: Check IP not already in use
+  ansible.builtin.shell: "ping -c1 -w1 {{ vm.ip }} > /dev/null; echo $?"
+  register: result_ping
+  delegate_to: localhost
 
-# - name: Fail if IP already in use
-#   ansible.builtin.fail:
-#     msg: "IP {{ vm.ip }} ALREADY IN USE!"
-#   when: result_ping.stdout == "0"
-#   delegate_to: localhost
+- name: Fail if IP already in use
+  ansible.builtin.fail:
+    msg: "IP {{ vm.ip }} ALREADY IN USE!"
+  when: result_ping.stdout == "0"
+  delegate_to: localhost
 
 - name: Include vars of users.yaml
   ansible.builtin.include_vars:
