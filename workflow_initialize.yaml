@@ -1,0 +1,10 @@
+---
+- name: Export all workflow extra vars as artifacts
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Publish all workflow extra vars for downstream jobs
+      ansible.builtin.set_stats:
+         "{{ vars | dict2items | items2dict }}"
+      per_host: false
+
