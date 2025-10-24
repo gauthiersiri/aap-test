@@ -27,9 +27,6 @@
     kind: VirtualMachine
     api_version: kubevirt.io/v1
     name: "{{ vm.name }}"
-    host: "{{ rhov.api_url }}"
-    api_key: "{{ rhov.api_token }}"
-    validate_certs: false
   register: vm_exists
   delegate_to: localhost
 
@@ -48,9 +45,6 @@
   kubernetes.core.k8s:
     state: present
     template: vm.yml.j2
-    host: "{{ rhov.api_url }}"
-    api_key: "{{ rhov.api_token }}"
-    validate_certs: false
   delegate_to: localhost
 
 - name: "Add VM to an inventory group"
