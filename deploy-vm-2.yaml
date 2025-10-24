@@ -12,6 +12,7 @@
         body_format: json
         return_content: yes
         status_code: 200
+        validate_certs: no      
       register: result_update_status
 
 - hosts: localhost
@@ -42,4 +43,5 @@
         body_format: json
         return_content: yes
         status_code: 200
+        validate_certs: no
       register: result_update_status
