@@ -1,0 +1,16 @@
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Remove VM
+      kubernetes.core.k8s:
+        state: absent
+        namespace: "{{ rhov.namespace }}"
+        kind: VirtualMachine
+        api_version: kubevirt.io/v1
+        name: "{{ vm.name }}"
+      register: result_remove_vm
+    - name: force fail if VM removal failed
+      ansible.builtin.fail:
+        msg: "Provsioning {{ vm.name }} in namespace {{ rhov.namespace }} has failed"
+      
+
