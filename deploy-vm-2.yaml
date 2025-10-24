@@ -3,7 +3,7 @@
   tasks:
     - name: Update Host status to provisioning
       uri:
-        url: "{{ api_endpoint }}/{{ host_id }}/status"
+        url: "{{ host_api_endpoint }}/{{ host_id }}/status"
         method: PUT
         headers:
           Content-Type: "application/json"
@@ -33,7 +33,7 @@
   tasks:
     - name: Update Host status to provisioning
       uri:
-        url: "{{ api_endpoint }}/{{ host_id }}/status"
+        url: "{{ host_api_endpoint }}/{{ host_id }}/status"
         method: PUT
         headers:
           Content-Type: "application/json"
