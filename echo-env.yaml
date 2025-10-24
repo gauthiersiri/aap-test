@@ -1,0 +1,13 @@
+- name: echo injected key
+  hosts: localhost
+  tasks:
+    - name: Show the key
+      debug:
+        msg: "The key is {{ lookup('env', 'MY_KEY') }}"
+    - name: Show all environment variables for debugging
+      ansible.builtin.shell: env
+      register: env_output
+
+    - name: Display environment variables
+      ansible.builtin.debug:
+        msg: "{{ env_output.stdout_lines }}"
