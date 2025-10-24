@@ -11,3 +11,12 @@
     - name: Display environment variables
       ansible.builtin.debug:
         msg: "{{ env_output.stdout_lines }}"
+    - name: list pod in namespace hosts-manager
+      kubernetes.core.k8s_info:
+        namespace: hosts-manager
+        kind: Pod
+        validate_certs: false
+      register: pod_list
+    - name: Display pod list
+      ansible.builtin.debug:
+        var: pod_list.resources
