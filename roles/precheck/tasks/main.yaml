@@ -22,9 +22,6 @@
     kind: VirtualMachine
     api_version: kubevirt.io/v1
     name: "{{ vm.name }}"
-    host: "{{ rhov.api_url }}"
-    api_key: "{{ rhov.api_token }}"
-    validate_certs: false
   register: vm_exists
   delegate_to: localhost
 
