@@ -9,7 +9,22 @@
         api_version: kubevirt.io/v1
         name: "{{ vm.name }}"
       register: result_remove_vm
-    - name: force fail if VM removal failed
+
+    - name: Update Host status to provisioning
+      uri:
+        url: "{{ host_api_endpoint }}/{{ host_id }}/status"
+        method: PUT
+        headers:
+          Content-Type: "application/json"
+        body:
+          status: "free"
+        body_format: json
+        return_content: yes
+        status_code: 200
+        validate_certs: no
+      register: result_update_status
+
+    - name: force fail since the VM is not deployed
       ansible.builtin.fail:
         msg: "Provsioning {{ vm.name }} in namespace {{ rhov.namespace }} has failed"
       
