@@ -1,0 +1,89 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: win2k22-gauth
+  namespace: gauth
+spec:
+  runStrategy: RerunOnFailure
+  
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        name: win2k22-gauth
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: win2k22-os-image-template
+          namespace: openshift-virtualization-os-images
+        storage:
+          accessModes:
+            - ReadWriteMany
+          resources:
+            requests:
+              storage: '38654705664'
+          storageClassName: ocs-storagecluster-cephfs
+  template:
+    spec:
+      architecture: amd64
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: sata
+              name: rootdisk
+            - cdrom:
+                bus: sata
+              name: windows-drivers-disk
+          interfaces:
+            - macAddress: '02:20:34:00:00:13'
+              masquerade: {}
+              model: e1000e
+              name: default
+          logSerialConsole: false
+          tpm:
+            persistent: true
+        features:
+          acpi: {}
+          apic: {}
+          hyperv:
+            reenlightenment: {}
+            ipi: {}
+            synic: {}
+            synictimer:
+              direct: {}
+            spinlocks:
+              spinlocks: 8191
+            reset: {}
+            relaxed: {}
+            vpindex: {}
+            runtime: {}
+            tlbflush: {}
+            frequencies: {}
+            vapic: {}
+          smm: {}
+        firmware:
+          bootloader:
+            efi:
+              persistent: true
+              secureBoot: true
+        machine:
+          type: pc-q35-rhel9.4.0
+        memory:
+          guest: 4Gi
+        resources: {}
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 3600
+      volumes:
+        - dataVolume:
+            name: win2k22-gauth
+          name: rootdisk
+        - containerDisk:
+            image: 'registry.redhat.io/container-native-virtualization/virtio-win-rhel9@sha256:786580ba56c3b09899be0af504a5c96486cbd55d1c4ff4ed57ca722b7f9c0b45'
+          name: windows-drivers-disk

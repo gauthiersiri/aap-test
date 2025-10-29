@@ -1,0 +1,47 @@
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Update Host status to provisioning
+      uri:
+        url: "{{ host_api_endpoint }}/{{ host_id }}/status"
+        method: PUT
+        headers:
+          Content-Type: "application/json"
+        body:
+          status: "provisioning"
+        body_format: json
+        return_content: yes
+        status_code: 200
+        validate_certs: no      
+      register: result_update_status
+
+- hosts: localhost
+  gather_facts: false
+  roles:
+  - deploy-VM-immutability
+
+- hosts: deployed_vm
+  become: true
+  gather_facts: false
+  vars:
+    # ansible_ssh_private_key_file: "{{ post_prov.key_file }}"
+    ansible_ssh_user: "cloud-user"
+  roles:
+  - post-prov 
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Update Host status to provisioning
+      uri:
+        url: "{{ host_api_endpoint }}/{{ host_id }}/status"
+        method: PUT
+        headers:
+          Content-Type: "application/json"
+        body:
+          status: "used"
+        body_format: json
+        return_content: yes
+        status_code: 200
+        validate_certs: no
+      register: result_update_status
