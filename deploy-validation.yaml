@@ -1,9 +1,0 @@
----
-- name: Call API and store results in facts
-  hosts: localhost
-  gather_facts: no
-  tasks:
-    - name: Display provisioning message
-      debug:
-        msg: "VM Provisioning status : IP: {{ assigned_hostname }} / Hostname: ({{ assigned_ip }}) / Deployed: {{ is_deployed }}..."
-
